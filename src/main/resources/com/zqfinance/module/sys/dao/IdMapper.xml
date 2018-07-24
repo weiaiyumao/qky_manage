@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>    
+<!DOCTYPE mapper    
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"    
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zqfinance.module.sys.dao.IdMapper">
+
+	<select id="getUserId"  resultType="long" flushCache="true" useCache="false">
+		SELECT SEQ_TADMIN_USER.NEXTVAL FROM DUAL
+	</select>
+	
+	<select id="getModuleId"  resultType="long" flushCache="true" useCache="false">
+		SELECT SEQ_TADMIN_MODULE.NEXTVAL FROM DUAL
+	</select>
+	
+	<select id="getActionId"  resultType="long" flushCache="true" useCache="false">
+		SELECT SEQ_TADMIN_ACTION.NEXTVAL FROM DUAL
+	</select>
+	
+	<select id="getRoleId"  resultType="long" flushCache="true" useCache="false">
+		SELECT SEQ_TADMIN_ROLE.NEXTVAL FROM DUAL
+	</select>
+	
+	<select id="getRoleActionMapId"  resultType="long" flushCache="true" useCache="false">
+		SELECT SEQ_TADMIN_ROLE_ACTION_MAP.NEXTVAL FROM DUAL
+	</select>
+	
+	<select id="getUserRoleMapId"  resultType="long" flushCache="true" useCache="false">
+		SELECT SEQ_TADMIN_USER_ROLE_MAP.NEXTVAL FROM DUAL
+	</select>
+</mapper>

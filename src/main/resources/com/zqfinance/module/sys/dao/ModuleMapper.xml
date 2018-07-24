@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>    
+<!DOCTYPE mapper    
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"    
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zqfinance.module.sys.dao.ModuleMapper">
+	<sql id="select_allcol_module">
+		select t.*,t1.module_name parent_name from tadmin_module t left join tadmin_module t1 on t.parent_id = t1.id 
+	</sql>
+	
+	<!-- 查询功能模块的列表 -->
+	<select id="getModuleList"  resultType="com.zqfinance.module.sys.domain.Module">
+		<include refid="select_allcol_module"/>	
+		<trim prefix="WHERE" prefixOverrides="and|or">
+			<if test="moduleName!=null and moduleName!=''">
+				AND t.module_name like '%${moduleName}%' 
+			</if>
+		</trim>	
+		order by t.id limit #{beginRow},#{endRow}
+	</select>
+	
+	<select id="getModuleByNameOrId"  resultType="com.zqfinance.module.sys.domain.Module">
+		<include refid="select_allcol_module"/>	
+		<trim prefix="WHERE" prefixOverrides="and|or">
+			<if test="moduleName!=null and moduleName!=''">
+				AND t.module_name = #{moduleName} 
+			</if>
+			<if test="id!=null and id!=''">
+				AND t.id = #{id}
+			</if>
+		</trim>	
+	</select>
+	
+	<!-- 查询出Module记录总和 -->
+	<select id="getModuleCount"  resultType="int">
+		select COUNT(1) FROM tadmin_module 
+	</select>
+	
+	<!-- 保存module -->
+	<insert id="saveModule" keyProperty="id" useGeneratedKeys="true" parameterType="com.zqfinance.module.sys.domain.Module">
+		insert into tadmin_module (
+			module_name,
+			parent_id,
+			m_sort
+		)
+		values(
+			#{moduleName,jdbcType=VARCHAR},
+			#{parentId},
+			#{mSort,jdbcType=VARCHAR}
+		)
+	</insert>
+	<!-- 修改Module -->
+	<update id="updateModule" parameterType="com.zqfinance.module.sys.domain.Module">
+		update tadmin_module set module_name = #{moduleName},parent_id = #{parentId},m_sort = #{mSort}  where id = #{id}
+	</update>
+	<!-- 删除module -->
+	<delete id="delModule" parameterType="long">
+		delete from tadmin_module where id = #{id}
+	</delete>
+	<!-- 根据ID取得Module的对象 -->
+	<select id="getModuleById" resultType="com.zqfinance.module.sys.domain.Module" parameterType="long">
+		select * from tadmin_module where id = #{id}
+	</select>
+	<select id="getFirstLevelModule" resultType="com.zqfinance.module.sys.domain.Module" >
+		select * from tadmin_module where parent_id = 0 order by m_sort
+	</select>
+	
+	<select id="getSecondModule" resultType="com.zqfinance.module.sys.domain.Module" parameterType="long">
+		select * from tadmin_module where parent_id = #{parentId}
+	</select>
+	
+	<select id="getAllSecondModule" resultType="com.zqfinance.module.sys.domain.Module">
+		select * from tadmin_module where parent_id != 0 order by m_sort
+	</select>
+	
+	<select id="getAllModule" resultType="com.zqfinance.module.sys.domain.Module">
+	select * from tadmin_module order by m_sort
+	</select>
+	
+	<select id="getSubIdList" resultType="long" parameterType="long">
+		select id From tadmin_module 
+		where FIND_IN_SET (id,module_function(#{id}))
+	</select>
+	
+	<select id="delSubModule" parameterType="long" >
+		delete from tadmin_module where FIND_IN_SET (id,module_function(#{id}))
+	</select>
+</mapper>

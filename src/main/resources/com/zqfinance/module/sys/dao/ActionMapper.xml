@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>    
+<!DOCTYPE mapper    
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"    
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zqfinance.module.sys.dao.ActionMapper">
+	<sql id="select_allcol_action">
+		select t.*,t1.module_name moduleName from tadmin_action t 
+			left join tadmin_module t1 on t.module_id = t1.id 
+			
+	</sql>
+	
+	<!-- 查询功能的列表 -->
+	<select id="getActionList"  resultType="com.zqfinance.module.sys.domain.Action" parameterType="com.zqfinance.module.sys.domain.Action">
+		<include refid="select_allcol_action"/>	
+		<trim prefix="WHERE" prefixOverrides="and|or">
+			<if test="actionName!=null and actionName!=''">
+				AND t.action_name like '%${actionName}%' 
+			</if>
+			<if test="actionUrl!=null and actionUrl!=''">
+				AND t.action_url = #{actionUrl}
+			</if>
+		</trim>	
+		order by t.a_sort limit #{beginRow},#{endRow}
+	</select>
+	
+	<!-- 查询功能的列表 -->
+	<select id="getActionByNameOrId"  resultType="com.zqfinance.module.sys.domain.Action" parameterType="com.zqfinance.module.sys.domain.Action">
+		<include refid="select_allcol_action"/>	
+		<trim prefix="WHERE" prefixOverrides="and|or">
+			<if test="actionName!=null and actionName!=''">
+				AND t.action_name = #{actionName} 
+			</if>
+			<if test="id!=null and id!=''">
+				AND t.id = #{id}
+			</if>
+		</trim>	
+	</select>
+	
+	<!-- 查询出action记录总和 -->
+	<select id="getActionCount"  resultType="int">
+		SELECT COUNT(1) FROM tadmin_action 
+	</select>
+	
+	<!-- 保存action -->
+	<insert id="addAction" useGeneratedKeys="true" keyProperty="id" parameterType="com.zqfinance.module.sys.domain.Action">
+		INSERT INTO tadmin_action (
+			ACTION_NAME,
+			ACTION_URL,
+			MODULE_ID,
+			A_SORT
+		)
+		VALUES(
+			#{actionName,jdbcType=VARCHAR},
+			#{actionUrl,jdbcType=VARCHAR},
+			#{moduleId},
+			#{aSort,jdbcType=VARCHAR}
+		)
+	</insert>
+	<!-- 修改action -->
+	<update id="updateAction" parameterType="com.zqfinance.module.sys.domain.Action">
+		UPDATE tadmin_action SET action_name = #{actionName},
+			action_url=#{actionUrl},
+			module_id = #{moduleId},
+			A_SORT = #{aSort,jdbcType=VARCHAR}
+			where ID = #{id}
+	</update>
+	<!-- 删除action -->
+	<delete id="delAction" parameterType="long">
+		DELETE FROM tadmin_action WHERE ID = #{id}
+	</delete>
+	<!-- 根据ID取得action的对象 -->
+	<select id="getActionById" resultType="com.zqfinance.module.sys.domain.Action" parameterType="long">
+		select * from tadmin_action where id = #{id}
+	</select>
+	
+	<select id="getActionListByModule" resultType="com.zqfinance.module.sys.domain.Action" parameterType="long">
+		select * from tadmin_action where module_id = #{moduleId} order by a_sort
+	</select>
+	
+	<select id="getAllActionList" resultType="com.zqfinance.module.sys.domain.Action">
+		select * from tadmin_action order by a_sort
+	</select>
+	
+	<select id="getRoleListByActionId" parameterType="long" resultType="com.zqfinance.module.sys.domain.Role">
+		select t.* from tadmin_role t left join tadmin_role_action_map t2 on t.id = t2.role_id where t2.action_id =#{actionId}
+	</select>
+	
+	<delete id="delRoleActionMapByActionId" parameterType="long">
+		delete from tadmin_role_action_map where action_id = #{actionId}
+	</delete>
+	
+	<delete id="delActionByModuleIdList" parameterType="list">
+		DELETE FROM tadmin_action where module_id in 
+		<foreach collection="moduleIdList" item="moduleId" index="index" separator="," open="(" close=")">
+			#{moduleId}
+		</foreach>
+	</delete>
+	
+	<select id="getActionByModuleIdList" resultType="list" >
+		select id FROM tadmin_action where module_id in 
+		<foreach collection="moduleIdList" item="moduleId" index="index" separator="," open="(" close=")">
+			#{moduleId}
+		</foreach>
+	</select>
+	
+	<delete id="delRoleActionMapByActionIdList" parameterType="list">
+		delete from tadmin_role_action_map where action_id in
+		<foreach collection="actionIdList" item="actionId" index="index" separator="," open="(" close=")">
+			#{actionId}
+		</foreach>
+	</delete>
+</mapper>

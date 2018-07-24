@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>    
+<!DOCTYPE mapper    
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"    
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zqfinance.module.sys.dao.UserMapper">
+	<sql id="select_allcol_user">
+		SELECT * FROM tadmin_user 
+	</sql>
+
+	<select id="getUserList"  resultType="com.zqfinance.module.sys.domain.User">
+		<include refid="select_allcol_user"/>	
+		<trim prefix="WHERE" prefixOverrides="and|or">
+			<if test="userNameCn!=null and userNameCn!=''">
+				AND user_name_cn like '%${userNameCn}%' 
+			</if>
+			<if test="userNameEn!=null and userNameEn!=''">
+				AND user_name_en like '%${userNameEn}%'
+			</if>
+			
+			<if test="userName!=null and userName!=''">
+				AND user_name = #{userName}
+			</if>
+			<if test="cardNo!=null and cardNo!=''">
+				AND card_no = #{cardNo}
+			</if>
+		</trim>
+		ORDER BY ID DESC
+		limit #{beginRow},#{endRow}
+	</select>
+	
+	<select id="getUserListByNameOrCardNo"  resultType="com.zqfinance.module.sys.domain.User">
+		<include refid="select_allcol_user"/>	
+		<trim prefix="WHERE" prefixOverrides="and|or">
+			<if test="userName!=null and userName!=''">
+				AND user_name = #{userName}
+			</if>
+			<if test="cardNo!=null and cardNo!=''">
+				AND card_no = #{cardNo}
+			</if>
+		</trim>
+	</select>
+	
+	<select id="getUserByNameOrCardNoOrId"  resultType="com.zqfinance.module.sys.domain.User">
+		<include refid="select_allcol_user"/>	
+		<trim prefix="WHERE" prefixOverrides="and|or">
+			<if test="userName!=null and userName!=''">
+				AND user_name = #{userName}
+			</if>
+			<if test="cardNo!=null and cardNo!=''">
+				AND card_no = #{cardNo}
+			</if>
+			<if test="id!=null and id!=''">
+				AND id = #{id}
+			</if>
+		</trim>
+	</select>
+	
+	<!-- 查询出user记录总和 -->
+	<select id="getUserCount"  resultType="int">
+		SELECT COUNT(1) FROM tadmin_user 
+	</select>
+	
+	<insert id="addUser" useGeneratedKeys="true" keyProperty="id" parameterType="com.zqfinance.module.sys.domain.User">
+		INSERT INTO tadmin_user (
+			card_no,
+			user_name,
+			user_name_cn,
+			user_name_en,
+			user_status,
+			user_pass,
+			last_login_time,
+			last_login_ip
+		)
+		VALUES(
+			#{cardNo,jdbcType=VARCHAR},
+			#{userName,jdbcType=VARCHAR},
+			#{userNameCn,jdbcType=VARCHAR},
+			#{userNameEn,jdbcType=VARCHAR},
+			#{userStatus,jdbcType=VARCHAR},
+			#{userPass,jdbcType=VARCHAR},
+			#{lastLoginTime,jdbcType=VARCHAR},
+			#{lastLoginIp,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<insert id="saveUserRoleMapList" useGeneratedKeys="true" keyProperty="id" parameterType="com.zqfinance.module.sys.domain.UserRoleMap">
+		insert into tadmin_user_role_map (
+			user_id,
+			role_id
+		) 
+		values 
+		<foreach collection="userRoleMapList" index="index" item="userRole"  separator=",">
+         	( 
+         	 #{userRole.userId},
+         	 #{userRole.roleId}
+          )
+         </foreach> 
+         <selectKey resultType="int" order="AFTER" keyProperty="id">
+ 		SELECT LAST_INSERT_ID() AS id
+ 		</selectKey>
+	</insert>
+	
+	<select id="getUserById" parameterType="long" resultType="com.zqfinance.module.sys.domain.User">
+		select * from tadmin_user t where t.id = #{id}
+	</select>
+	
+	<select id="getRoleListByUserId" parameterType="long" resultType="com.zqfinance.module.sys.domain.UserRoleMap">
+		select * from tadmin_user_role_map t where t.user_id = #{userId}
+	</select>
+	
+	<update id="updateUser" parameterType="com.zqfinance.module.sys.domain.User">
+		update tadmin_user set card_no = #{cardNo,jdbcType=VARCHAR},
+								user_name=#{userName,jdbcType=VARCHAR},
+								user_name_cn=#{userNameCn,jdbcType=VARCHAR},
+								user_name_en=#{userNameEn,jdbcType=VARCHAR},
+								user_status = #{userStatus,jdbcType=VARCHAR},
+								last_login_time=#{lastLoginTime,jdbcType=VARCHAR} where id = #{id}
+	</update>
+	<update id="updateUserPass" parameterType="com.zqfinance.module.sys.domain.User">
+		update tadmin_user set user_pass=#{userPass,jdbcType=VARCHAR} where id = #{id}
+	</update>
+	
+	<delete id="delUserRoleMapByUser" parameterType="long">
+		delete from tadmin_user_role_map where user_id = #{userId}
+	</delete>
+	<select id="getRoleListByUserName" parameterType="String" resultType="com.zqfinance.module.sys.domain.Role">
+		select t1.* from tadmin_user_role_map t
+		 left join tadmin_role t1 on t.role_id = t1.id 
+		 left join tadmin_user t2 on t.user_id = t2.id
+		where t2.user_name = #{userName}
+	</select>
+	
+	<select id="getUserByUserName" parameterType="String" resultType="com.zqfinance.module.sys.domain.User">
+		select * from tadmin_user where user_name = #{userName} and user_status = '1'
+	</select>
+	
+	<select id="delUserByUserId" parameterType="long">
+		delete from tadmin_user where id = #{userId}
+	</select>
+	
+</mapper>

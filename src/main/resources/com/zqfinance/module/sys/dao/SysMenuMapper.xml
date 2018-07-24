@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>    
+<!DOCTYPE mapper    
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"    
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zqfinance.module.sys.dao.SysMenuMapper">
+
+	<sql id="select_allcol_sysmenu">
+		select t.*,
+			   t1.menu_name parent_name
+	    from tadmin_menu t left join 
+	         tadmin_menu t1 on 
+	         t.parent_id = t1.id 
+	    
+	</sql>
+
+	<select id="getSysMenuList"  resultType="com.zqfinance.module.sys.domain.SysMenu">
+			<include refid="select_allcol_sysmenu"/>
+			<trim prefix="WHERE" prefixOverrides="and|or">
+			<if test="menuName!=null and menuName!=''">
+				AND t.menu_name like '%${menuName}%' 
+			</if>
+			<if test="menuCode!=null and menuCode!=''">
+				AND t.menu_code like '%${menuCode}%' 
+			</if>
+			<if test="menuLevel!=null and menuLevel!=''">
+				AND t.menu_level = #{menuLevel}
+			</if>
+		</trim>	
+			order by t.menu_sort
+			limit #{beginRow},#{endRow}
+	</select>
+	
+	<!-- 查询出user记录总和 -->
+	<select id="getSysMenuCount"  resultType="int">
+		SELECT COUNT(1) FROM tadmin_menu 
+	</select>
+	
+	<!-- 保存菜单相关内容 -->
+	<insert id="saveMenu" parameterType="com.zqfinance.module.sys.domain.SysMenu">
+		INSERT INTO tadmin_menu (
+			id,
+			menu_code,
+			menu_name,
+			menu_level,
+			menu_type,
+			menu_status,
+			parent_id,
+			menu_sort,
+			menu_url
+		)values(
+			#{id},
+			#{menucode,jdbctype=varchar},
+			#{menuname,jdbctype=varchar},
+			#{menulevel,jdbctype=varchar},
+			#{menutype,jdbctype=varchar},
+			#{menustatus,jdbctype=varchar},
+			#{parentid,jdbctype=varchar},
+			#{menusort,jdbctype=varchar},
+			#{menuurl,jdbctype=varchar}
+		)
+	</insert>
+	
+	<!-- 批量插入按钮 -->
+	<insert id="saveButton" parameterType="java.util.List">
+		INSERT INTO tadmin_button
+		 (id,
+		  button_code,
+		  button_name,
+		  menu_id
+         ) 
+         <foreach collection="sysButtonList" index="index" item="button"  separator="union all">
+         	select  #{button.id},
+         	 #{button.buttonCode},
+         	 #{button.buttonName},
+         	 #{button.menuId} from dual
+         </foreach> 
+	</insert>
+	
+	
+	<!-- 查询出所有的一级菜单的列表 -->
+	<select id="getFirstMenuList" resultType="com.zqfinance.module.sys.domain.SysMenu">
+		select * from tadmin_menu  where parent_id = 0 order by menu_sort
+	</select>
+	
+	<!--根据菜单ID取得菜单的对象-->
+	<select id="getSysMenuById" resultType="com.zqfinance.module.sys.domain.SysMenu" parameterType="long">
+		select * from tadmin_menu where id = #{menuid}
+	</select>
+	
+	<!-- 根据菜单取得按钮的列表 -->
+	<select id="getButtonListByMenuId" resultType="com.zqfinance.module.sys.domain.SysButton" parameterType="long">
+		select * from tadmin_button t where t.menu_id = #{menuId}
+	</select>
+	
+	<!-- 修改菜单信息 -->
+	<update id="updateSysMenu" parameterType="com.zqfinance.module.sys.domain.SysMenu">
+		update tadmin_menu 
+			set menu_code = #{menuCode,jdbcType=VARCHAR},
+				menu_name = #{menuName,jdbcType=VARCHAR},
+				menu_level = #{menuLevel,jdbcType=VARCHAR},
+				menu_type = #{menuType,jdbcType=VARCHAR},
+				menu_status = #{menuStatus,jdbcType=VARCHAR},
+				parent_id = #{parentId,jdbcType=VARCHAR},
+				menu_sort = #{menuSort,jdbcType=VARCHAR},
+				menu_url = #{menuUrl,jdbcType=VARCHAR}
+			where id=#{id}
+	</update>
+	<!-- 根据ID列表删除 -->
+	<delete id="delSysButtonList">
+		delete from tadmin_button t where id in 
+		<foreach collection="idList" index="index" item="id" open="(" close=")" separator=",">
+		 	#{id}
+		 </foreach>
+	</delete>
+	<!-- 根据菜单ID删除按钮 -->
+	<delete id="delSysButtonByMenuId" parameterType="long">
+		delete from tadmin_button where menu_id = #{menuId}
+	</delete>
+	
+	<!-- 根据ID删除菜单 -->
+	<delete id="delMenuById" parameterType="long">
+		delete from tadmin_menu where id = #{menuId}
+	</delete>
+</mapper>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:jsp="http://java.sun.com/xml/ns/javaee/jsp" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
+  <mime-mapping>
+    <extension>xml</extension>
+    <mime-type>text/xml</mime-type>
+  </mime-mapping>
+  <jsp-config>
+    <taglib>
+      <taglib-uri>http://rrdai.com/mgr-tags</taglib-uri>
+      <taglib-location>/WEB-INF/tld/manage-tag.tld</taglib-location>
+    </taglib>
+  </jsp-config>
+  <welcome-file-list>
+    <welcome-file>../view/index.jsp</welcome-file>
+  </welcome-file-list>
+  
+  	<servlet>
+		<servlet-name>UploadServlet</servlet-name>
+		<servlet-class>com.zqfinance.system.servlet.UploadServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>UploadServlet</servlet-name>
+		<url-pattern>/upload/*</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>OrderFileUploadServlet</servlet-name>
+		<servlet-class>com.zqfinance.system.servlet.OrderFileUploadServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>OrderFileUploadServlet</servlet-name>
+		<url-pattern>/orderFileUpload/*</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>JPGUploadServlet</servlet-name>
+		<servlet-class>com.zqfinance.system.servlet.JPGUploadServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>JPGUploadServlet</servlet-name>
+		<url-pattern>/JPGUploadServlet/*</url-pattern>
+	</servlet-mapping>
+</web-app>

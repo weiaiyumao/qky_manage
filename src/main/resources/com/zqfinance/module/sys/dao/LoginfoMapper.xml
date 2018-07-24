@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>    
+<!DOCTYPE mapper    
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"    
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zqfinance.module.sys.dao.LoginfoMapper">
+	<sql id="select_allcol_loginfo">
+		select t.* from tadmin_loginfo t 
+	</sql>
+	
+	<!-- 查询功能的列表 -->
+	<select id="getLoginfoList"  resultType="com.zqfinance.module.sys.domain.Loginfo" parameterType="com.zqfinance.module.sys.domain.Loginfo">
+		<include refid="select_allcol_loginfo"/>	
+		<trim prefix="WHERE" prefixOverrides="and|or">
+			<if test="userName!=null and userName!=''">
+				AND t.username like '%${userName}%' 
+			</if>
+		</trim>	
+		order by t.id desc limit #{beginRow},#{endRow}
+	</select>
+	
+	<!-- 查询出action记录总和 -->
+	<select id="getLoginfoCount"  resultType="int" parameterType="com.zqfinance.module.sys.domain.Loginfo">
+		SELECT COUNT(1) FROM tadmin_loginfo t
+		<trim prefix="WHERE" prefixOverrides="and|or">
+			<if test="userName!=null and userName!=''">
+				AND t.username like '%${userName}%' 
+			</if>
+		</trim>	
+	</select>
+	
+	<!-- 保存action -->
+	<insert id="addLoginfo" useGeneratedKeys="true" keyProperty="id" parameterType="com.zqfinance.module.sys.domain.Loginfo">
+		INSERT INTO tadmin_loginfo (
+			USERID,
+			USERNAME,
+			REQUEST_IP,
+			LOGIN_STATUS,
+			MODULE_NAME
+		)
+		VALUES(
+			#{userId},
+			#{userName,jdbcType=VARCHAR},
+			#{requestIp,jdbcType=VARCHAR},
+			#{loginStatus,jdbcType=VARCHAR},
+			#{moduleName,jdbcType=VARCHAR}
+		)
+	</insert>
+	<!-- 删除action -->
+	<delete id="delLoginfo" parameterType="long">
+		DELETE FROM tadmin_loginfo WHERE ID = #{id}
+	</delete>
+	<!-- 根据ID取得action的对象 -->
+	<select id="getActionById" resultType="com.zqfinance.module.sys.domain.Loginfo" parameterType="long">
+		select * from tadmin_loginfo
+		<trim prefix="WHERE" prefixOverrides="and|or">
+			<if test="userName!=null and userName!=''">
+				AND t.username like '%${userName}%' 
+			</if>
+			<if test="id!=null and id!=''">
+				AND t.id like '%${id}%' 
+			</if>
+		</trim>	
+	</select>
+</mapper>

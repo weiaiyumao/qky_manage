@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>    
+<!DOCTYPE mapper    
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"    
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zqfinance.module.sys.dao.RoleMapper">
+	<sql id="select_allcol_role">
+		select * from tadmin_role 
+	</sql>
+	
+	<!-- 查询功能的列表 -->
+	<select id="getRoleList"  resultType="com.zqfinance.module.sys.domain.Role" parameterType="com.zqfinance.module.sys.domain.Role">
+		<include refid="select_allcol_role"/>	
+		<trim prefix="WHERE" prefixOverrides="and|or">
+			<if test="roleName!=null and roleName!=''">
+				AND role_name like '%${roleName}%' 
+			</if>
+			<if test="roleCode!=null and roleCode!=''">
+				AND role_code = '${roleCode}'
+			</if>
+		</trim>	
+		order by id limit #{beginRow},#{endRow}
+	</select>
+	<!-- 查询角色对象根据Id或者RoleName或者RoleCode-->
+	<select id="getRoleByRoleNameOrRoleCodeOrId"  resultType="com.zqfinance.module.sys.domain.Role" parameterType="com.zqfinance.module.sys.domain.Role">
+		<include refid="select_allcol_role"/>	
+		<trim prefix="WHERE" prefixOverrides="and|or">
+			<if test="roleName!=null and roleName!=''">
+				AND role_name = '${roleName}' 
+			</if>
+			<if test="roleCode!=null and roleCode!=''">
+				AND role_code = '${roleCode}'
+			</if>
+			<if test="id!=null and id!=''">
+				AND id = '${id}'
+			</if>
+		</trim>	
+	</select>
+	
+	<!-- 查询出role记录总和 -->
+	<select id="getRoleCount"  resultType="int">
+		select COUNT(1) FROM tadmin_role
+	</select>
+	
+	<!-- 保存role -->
+	<insert id="saveRole" keyProperty="id" useGeneratedKeys="true" parameterType="com.zqfinance.module.sys.domain.Role">
+		INSERT INTO tadmin_role (
+			role_name,
+			role_code,
+			role_status
+		)
+		VALUES(
+			#{roleName,jdbcType=VARCHAR},
+			#{roleCode,jdbcType=VARCHAR},
+			#{roleStatus,jdbcType=VARCHAR}
+		)
+	</insert>
+	<!-- 修改role -->
+	<update id="updateRole" parameterType="com.zqfinance.module.sys.domain.Role">
+		UPDATE tadmin_role SET role_name = #{roleName},role_code=#{roleCode},role_status = #{roleStatus,jdbcType=VARCHAR} where ID = #{id}
+	</update>
+	<!-- 删除role -->
+	<delete id="delRole" parameterType="long">
+		DELETE FROM tadmin_role WHERE ID = #{id}
+	</delete>
+	<!-- 根据ID取得role的对象 -->
+	<select id="getRoleById" resultType="com.zqfinance.module.sys.domain.Role" parameterType="long">
+		select * from tadmin_role where id = #{id}
+	</select>
+	
+	<!-- 保存role和action的对应关系 -->
+	<insert id="saveRoleActionMap" useGeneratedKeys="true" keyProperty="id" parameterType="com.zqfinance.module.sys.domain.RoleActionMap">
+		insert into tadmin_role_action_map (
+					role_id,
+					action_id
+				) 	
+				values	
+		<foreach collection="roleActionMapList" index="index" item="roleAction"  separator=",">
+         	(
+         	 #{roleAction.roleId},
+         	 #{roleAction.actionId}
+         	 )
+         </foreach> 
+         <selectKey resultType="int" order="AFTER" keyProperty="id">
+ 		SELECT LAST_INSERT_ID() AS id
+ 		</selectKey>
+	</insert>
+	
+	<!-- 查询出指定角色拥有的权限 -->
+	<select id="getRoleActionMapByRoleId" parameterType="long" resultType="com.zqfinance.module.sys.domain.RoleActionMap">
+		select * from tadmin_role_action_map t where t.role_id = #{roleId}
+	</select>
+	
+	<delete id="delRoleActionByRoleId" parameterType="long">
+		delete from tadmin_role_action_map  where role_id = #{roleId}
+	</delete>
+	
+	<select id="getActionListByRoleId" parameterType="long" resultType="com.zqfinance.module.sys.domain.Action">
+		select t.* from tadmin_action t left join tadmin_role_action_map t2 on t.id = t2.action_id where t2.role_id = #{roleId}
+	</select>
+	
+	<select id="getAllRoleList" resultType="com.zqfinance.module.sys.domain.Role">
+		<include refid="select_allcol_role"/>
+	</select>
+	
+	<delete id="delRoleUserByRoleId" parameterType="long">
+		delete from tadmin_user_role_map where role_id = #{roleId}
+	</delete>
+</mapper>
