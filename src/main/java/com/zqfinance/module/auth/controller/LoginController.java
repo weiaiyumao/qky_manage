@@ -80,24 +80,25 @@ public class LoginController extends DwzAjaxController {
     
     @RequestMapping(value = "/saveCustomerInSession")
     public @ResponseBody DwzAjaxController saveCustomerInSession(HttpServletRequest request,String id){    	
-    	JSONObject jsonObject = new JSONObject();
-    	jsonObject.put("customerIds", id.trim());
-		String resultString = sendRequestService.sendRequest(ConfigManager.LOAN_FINDBYCUSTOMERID,jsonObject);
-		DataMessage dataMessage = MessageUtil.parseDataMessageForP2b(resultString);
-		Customer customer = new Customer();
-		customer.setCustomerId(dataMessage.getData().get("customerid"));
-		customer.setEmail(dataMessage.getData().get("email"));
-		if(StringUtils.isNotBlank(dataMessage.getData().get("isautologin"))){
-			customer.setIsAutoLogin(Integer.parseInt(dataMessage.getData().get("isautologin")));
-		}
-		customer.setMobile(SpringUtil.formatNum(dataMessage.getData().get("mobile"), 3));
-		customer.setUsername(SpringUtil.formatName(dataMessage.getData().get("name")));
-		customer.setIdcard(SpringUtil.formatNum(dataMessage.getData().get("idcard"), 4));
-		request.getSession().setAttribute(ManageConfig.SESSION_CUSTOMER, customer);
-    	request.getSession().setAttribute(ManageConfig.SESSION_CUSTOMER_ID, customer.getCustomerId());
-    	List<Object> cuList = new ArrayList<Object>();
-    	cuList.add(customer);
-		return ajaxForwardSuccess("客户信息已选择",ManageConfig.DWZ_CALLBACK_TYPE_FORWARD , ManageConfig.DWZ_CALLBACK_TYPE_CLOSECURRENT, cuList);
+//    	JSONObject jsonObject = new JSONObject();
+//    	jsonObject.put("customerIds", id.trim());
+//		String resultString = sendRequestService.sendRequest(ConfigManager.LOAN_FINDBYCUSTOMERID,jsonObject);
+//		DataMessage dataMessage = MessageUtil.parseDataMessageForP2b(resultString);
+//		Customer customer = new Customer();
+//		customer.setCustomerId(dataMessage.getData().get("customerid"));
+//		customer.setEmail(dataMessage.getData().get("email"));
+//		if(StringUtils.isNotBlank(dataMessage.getData().get("isautologin"))){
+//			customer.setIsAutoLogin(Integer.parseInt(dataMessage.getData().get("isautologin")));
+//		}
+//		customer.setMobile(SpringUtil.formatNum(dataMessage.getData().get("mobile"), 3));
+//		customer.setUsername(SpringUtil.formatName(dataMessage.getData().get("name")));
+//		customer.setIdcard(SpringUtil.formatNum(dataMessage.getData().get("idcard"), 4));
+//		request.getSession().setAttribute(ManageConfig.SESSION_CUSTOMER, customer);
+//    	request.getSession().setAttribute(ManageConfig.SESSION_CUSTOMER_ID, customer.getCustomerId());
+//    	List<Object> cuList = new ArrayList<Object>();
+//    	cuList.add(customer);
+//		return ajaxForwardSuccess("客户信息已选择",ManageConfig.DWZ_CALLBACK_TYPE_FORWARD , ManageConfig.DWZ_CALLBACK_TYPE_CLOSECURRENT, cuList);
+		return null;
     }
     
     /**
@@ -106,58 +107,59 @@ public class LoginController extends DwzAjaxController {
 	 */
 	@RequestMapping("/findCustomerList")
 	public ModelAndView findCustomerList(HttpServletRequest request){
-		JSONObject jsonobject = RequestUtil.fromRequestToJson(request);
-		if(jsonobject.get("numPerPage")!=null && !jsonobject.get("numPerPage").equals("null")){
-			jsonobject.put("p2bPageSize",jsonobject.get("numPerPage"));
-		} else {
-			jsonobject.put("p2bPageSize","20");
-		}
-		if(request.getParameter("pageNum")!=null && !request.getParameter("pageNum").equals("null")){
-			jsonobject.put("p2bPageNum", jsonobject.get("pageNum"));
-		}else{
-			jsonobject.put("p2bPageNum", "1");
-		}
-		String returnString = sendRequestService.sendRequest(ConfigManager.LOAN_CUSTOMER_LIST,jsonobject);
-		DataPageMessage dataMessage = MessageUtil.parseDatePageMessageForP2b(returnString);
-		//DataPageMessage dataMessage = MessageUtil.parseDatePageMessage(returnString);
-		SpringUtil.formatDateByDataPageMessage(dataMessage);
-//		DateUtil.formatDateByDataPageMessage(dataMessage);
-		ModelAndView modelAndView = new ModelAndView("common/customerList");
-		modelAndView.addObject("dataMessage", dataMessage);
-		modelAndView.addObject("jsonobject",jsonobject);
-		return modelAndView;
+//		JSONObject jsonobject = RequestUtil.fromRequestToJson(request);
+//		if(jsonobject.get("numPerPage")!=null && !jsonobject.get("numPerPage").equals("null")){
+//			jsonobject.put("p2bPageSize",jsonobject.get("numPerPage"));
+//		} else {
+//			jsonobject.put("p2bPageSize","20");
+//		}
+//		if(request.getParameter("pageNum")!=null && !request.getParameter("pageNum").equals("null")){
+//			jsonobject.put("p2bPageNum", jsonobject.get("pageNum"));
+//		}else{
+//			jsonobject.put("p2bPageNum", "1");
+//		}
+//		String returnString = sendRequestService.sendRequest(ConfigManager.LOAN_CUSTOMER_LIST,jsonobject);
+//		DataPageMessage dataMessage = MessageUtil.parseDatePageMessageForP2b(returnString);
+//		//DataPageMessage dataMessage = MessageUtil.parseDatePageMessage(returnString);
+//		SpringUtil.formatDateByDataPageMessage(dataMessage);
+////		DateUtil.formatDateByDataPageMessage(dataMessage);
+//		ModelAndView modelAndView = new ModelAndView("common/customerList");
+//		modelAndView.addObject("dataMessage", dataMessage);
+//		modelAndView.addObject("jsonobject",jsonobject);
+		return null;
 	}
 	
 	@RequestMapping("/findPublicCustomerList")
 	public ModelAndView findPublicCustomerList(HttpServletRequest request){
-		ModelAndView modelAndView = new ModelAndView("common/publicCustomerList");
-		
-		JSONObject jsonobject = RequestUtil.fromRequestToJson(request);
-		if(jsonobject.get("id") == null && jsonobject.get("name") == null && jsonobject.get("mobile") == null && jsonobject.get("idcard") == null){
-			return modelAndView;
-		}
-		if(jsonobject.get("id").toString().equals("") && jsonobject.get("name").toString().equals("") && jsonobject.get("mobile").toString().equals("") && jsonobject.get("idcard").toString().equals("")){
-			return modelAndView;
-		}
-		
-		if(jsonobject.get("numPerPage")!=null && StringUtils.isNotBlank(jsonobject.get("numPerPage").toString())){
-			jsonobject.put("p2bPageSize",jsonobject.get("numPerPage"));
-		} else {
-			jsonobject.put("p2bPageSize","20");
-		}
-		if(request.getParameter("pageNum")!=null && StringUtils.isNotBlank(request.getParameter("pageNum").toString())){
-			jsonobject.put("p2bPageNum", jsonobject.get("pageNum"));
-		}else{
-			jsonobject.put("p2bPageNum", "1");
-		}
-		String returnString = sendRequestService.sendRequest(ConfigManager.LOAN_SINGLECUSTOMER_LIST,jsonobject);
-		DataPageMessage dataMessage = MessageUtil.parseDatePageMessageForP2b(returnString);
-		//DataPageMessage dataMessage = MessageUtil.parseDatePageMessage(returnString);
-		SpringUtil.formatDateByDataPageMessage(dataMessage);
-		DateUtil.formatDateByDataPageMessage(dataMessage);
-		modelAndView.addObject("dataMessage", dataMessage);
-		modelAndView.addObject("jsonobject",jsonobject);
-		return modelAndView;
+//		ModelAndView modelAndView = new ModelAndView("common/publicCustomerList");
+//
+//		JSONObject jsonobject = RequestUtil.fromRequestToJson(request);
+//		if(jsonobject.get("id") == null && jsonobject.get("name") == null && jsonobject.get("mobile") == null && jsonobject.get("idcard") == null){
+//			return modelAndView;
+//		}
+//		if(jsonobject.get("id").toString().equals("") && jsonobject.get("name").toString().equals("") && jsonobject.get("mobile").toString().equals("") && jsonobject.get("idcard").toString().equals("")){
+//			return modelAndView;
+//		}
+//
+//		if(jsonobject.get("numPerPage")!=null && StringUtils.isNotBlank(jsonobject.get("numPerPage").toString())){
+//			jsonobject.put("p2bPageSize",jsonobject.get("numPerPage"));
+//		} else {
+//			jsonobject.put("p2bPageSize","20");
+//		}
+//		if(request.getParameter("pageNum")!=null && StringUtils.isNotBlank(request.getParameter("pageNum").toString())){
+//			jsonobject.put("p2bPageNum", jsonobject.get("pageNum"));
+//		}else{
+//			jsonobject.put("p2bPageNum", "1");
+//		}
+//		String returnString = sendRequestService.sendRequest(ConfigManager.LOAN_SINGLECUSTOMER_LIST,jsonobject);
+//		DataPageMessage dataMessage = MessageUtil.parseDatePageMessageForP2b(returnString);
+//		//DataPageMessage dataMessage = MessageUtil.parseDatePageMessage(returnString);
+//		SpringUtil.formatDateByDataPageMessage(dataMessage);
+//		DateUtil.formatDateByDataPageMessage(dataMessage);
+//		modelAndView.addObject("dataMessage", dataMessage);
+//		modelAndView.addObject("jsonobject",jsonobject);
+//		return modelAndView;
+		return null;
 	}
     
     @RequestMapping(value = "/cancelCustomerInSession")

@@ -53,16 +53,16 @@ public class SendRequestServiceImpl implements SendRequestService {
 		
 	}
 
-	@Override
-	public void redirectRequest(HttpServletResponse response,String url, JSONObject jsonObject) {
-		String returnStr = HrdSignUtil.signForRedirect(jsonObject, ConfigManager.CFG_LCPAY_PRIKEY, ConfigManager.CFG_LCPAY_SIGNKEY, ConfigManager.CFG_LCPAY_SIGNPARAM);
-		try {
-			response.sendRedirect(url+"?"+returnStr);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+//	@Override
+//	public void redirectRequest(HttpServletResponse response,String url, JSONObject jsonObject) {
+//		String returnStr = HrdSignUtil.signForRedirect(jsonObject, ConfigManager.CFG_LCPAY_PRIKEY, ConfigManager.CFG_LCPAY_SIGNKEY, ConfigManager.CFG_LCPAY_SIGNPARAM);
+//		try {
+//			response.sendRedirect(url+"?"+returnStr);
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//	}
 
 	
 }

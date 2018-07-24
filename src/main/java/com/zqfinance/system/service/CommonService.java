@@ -10,5 +10,5 @@ import java.util.Map;
 public interface CommonService {
 	
 	
-	public Map<String,String> getPaybankMap();
+//	public Map<String,String> getPaybankMap();
 }

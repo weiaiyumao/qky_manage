@@ -9,6 +9,6 @@ public interface SendRequestService {
 	
 	public String sendRequest(String url,JSONObject josnObject);
 	
-	public void redirectRequest(HttpServletResponse response,String url, JSONObject jsonObject);
+//	public void redirectRequest(HttpServletResponse response,String url, JSONObject jsonObject);
 }
 

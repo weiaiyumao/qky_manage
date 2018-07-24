@@ -29,23 +29,23 @@ public class CommonServiceImpl implements CommonService {
 	@Autowired
 	private SendRequestService requestTradingAndPayService;
 	
-	/**
-	 * 取得银行
-	 * @return
-	 */
-	public Map<String,String> getPaybankMap(){
-		Map<String,String> paybankMap = new TreeMap<String,String>();
-		String returnStr = requestTradingAndPayService.sendRequest(ConfigManager.PAYBANK_FINDALL, new JSONObject());
-		if(StringUtils.isNotEmpty(returnStr)){
-			DateMessageForObject dataMessage= JSON.parseObject(returnStr,DateMessageForObject.class);
-			if(null != dataMessage && ManageConfig.DATE_MESSAGE_SUCCESS.equals(dataMessage.getResult())){
-				String bankStr = dataMessage.getData().toString();
-				List<JSONObject> jsonObjList = JSON.parseArray(bankStr, JSONObject.class);
-				for(JSONObject jsonObject : jsonObjList){
-					paybankMap.put(jsonObject.getString("bankcode"), jsonObject.getString("bankname"));
-				}
-			}
-		}
-		return paybankMap;
-	}
+//	/**
+//	 * 取得银行
+//	 * @return
+//	 */
+//	public Map<String,String> getPaybankMap(){
+//		Map<String,String> paybankMap = new TreeMap<String,String>();
+//		String returnStr = requestTradingAndPayService.sendRequest(ConfigManager.PAYBANK_FINDALL, new JSONObject());
+//		if(StringUtils.isNotEmpty(returnStr)){
+//			DateMessageForObject dataMessage= JSON.parseObject(returnStr,DateMessageForObject.class);
+//			if(null != dataMessage && ManageConfig.DATE_MESSAGE_SUCCESS.equals(dataMessage.getResult())){
+//				String bankStr = dataMessage.getData().toString();
+//				List<JSONObject> jsonObjList = JSON.parseArray(bankStr, JSONObject.class);
+//				for(JSONObject jsonObject : jsonObjList){
+//					paybankMap.put(jsonObject.getString("bankcode"), jsonObject.getString("bankname"));
+//				}
+//			}
+//		}
+//		return paybankMap;
+//	}
 }
