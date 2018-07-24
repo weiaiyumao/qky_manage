@@ -2,10 +2,10 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.zqfinance.module</groupId>
-  <artifactId>licaimanage</artifactId>
+  <artifactId>qky_manage</artifactId>
   <packaging>war</packaging>
   <version>0.0.1-SNAPSHOT</version>
-  <name>licaimanage web</name>
+  <name>qky_manage web</name>
   <url>http://maven.apache.org</url>
 
 	<dependencies>
@@ -351,7 +351,7 @@
 		
 	</dependencies>
   <build>
-    <finalName>licaimanage</finalName>
+    <finalName>qky_manage</finalName>
     <plugins>  
 	    <plugin>  
 	        <groupId>org.apache.maven.plugins</groupId>  
