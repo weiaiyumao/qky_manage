@@ -4,7 +4,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Expires" content="0" />
-<title>华融道管理后台</title>
+<title>区块云管理后台</title>
 <% String contextPath =request.getContextPath(); %>  
 <link href="<%=contextPath%>/resources/themes/default/style.css" rel="stylesheet" type="text/css" media="screen"/>
 <link href="<%=contextPath%>/resources/themes/css/core.css" rel="stylesheet" type="text/css" media="screen"/>

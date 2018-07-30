@@ -14,28 +14,28 @@
     <welcome-file>../view/index.jsp</welcome-file>
   </welcome-file-list>
   
-  	<servlet>
-		<servlet-name>UploadServlet</servlet-name>
-		<servlet-class>com.zqfinance.system.servlet.UploadServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>UploadServlet</servlet-name>
-		<url-pattern>/upload/*</url-pattern>
-	</servlet-mapping>
-	<servlet>
-		<servlet-name>OrderFileUploadServlet</servlet-name>
-		<servlet-class>com.zqfinance.system.servlet.OrderFileUploadServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>OrderFileUploadServlet</servlet-name>
-		<url-pattern>/orderFileUpload/*</url-pattern>
-	</servlet-mapping>
-	<servlet>
-		<servlet-name>JPGUploadServlet</servlet-name>
-		<servlet-class>com.zqfinance.system.servlet.JPGUploadServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>JPGUploadServlet</servlet-name>
-		<url-pattern>/JPGUploadServlet/*</url-pattern>
-	</servlet-mapping>
+  	<!--<servlet>-->
+		<!--<servlet-name>UploadServlet</servlet-name>-->
+		<!--<servlet-class>com.zqfinance.system.servlet.UploadServlet</servlet-class>-->
+	<!--</servlet>-->
+	<!--<servlet-mapping>-->
+		<!--<servlet-name>UploadServlet</servlet-name>-->
+		<!--<url-pattern>/upload/*</url-pattern>-->
+	<!--</servlet-mapping>-->
+	<!--<servlet>-->
+		<!--<servlet-name>OrderFileUploadServlet</servlet-name>-->
+		<!--<servlet-class>com.zqfinance.system.servlet.OrderFileUploadServlet</servlet-class>-->
+	<!--</servlet>-->
+	<!--<servlet-mapping>-->
+		<!--<servlet-name>OrderFileUploadServlet</servlet-name>-->
+		<!--<url-pattern>/orderFileUpload/*</url-pattern>-->
+	<!--</servlet-mapping>-->
+	<!--<servlet>-->
+		<!--<servlet-name>JPGUploadServlet</servlet-name>-->
+		<!--<servlet-class>com.zqfinance.system.servlet.JPGUploadServlet</servlet-class>-->
+	<!--</servlet>-->
+	<!--<servlet-mapping>-->
+		<!--<servlet-name>JPGUploadServlet</servlet-name>-->
+		<!--<url-pattern>/JPGUploadServlet/*</url-pattern>-->
+	<!--</servlet-mapping>-->
 </web-app>

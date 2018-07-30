@@ -6,7 +6,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<title>管理平台</title>
+<title>区块云管理平台</title>
 <link href="${pageContext.request.contextPath }/resources/css/login.css" rel="stylesheet" type="text/css">
 <script type="text/javascript">
 	function hideError(){
@@ -59,7 +59,7 @@
 			</div>
 		</div>
 		<div id="login_footer">
-			中秋（上海）金融信息服务有限公司 
+			区块云（上海）金融信息服务有限公司
 		</div>
 	</div>
 

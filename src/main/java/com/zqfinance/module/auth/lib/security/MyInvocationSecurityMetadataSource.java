@@ -70,7 +70,7 @@ public class MyInvocationSecurityMetadataSource
 				UserDetails user = UserUtil.getUserDetail();
 				if (user == null) {
 					throw new UsernameNotFoundException("未登录不能访问！");
-				}			
+				}
 			}
 			return null;
 	    }  

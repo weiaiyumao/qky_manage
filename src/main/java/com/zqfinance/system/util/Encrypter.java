@@ -115,8 +115,8 @@ public final class Encrypter {
 	}
 	
 	public static void main(String[] args) {
-		System.out.println(encrypt("123456"));
-		System.out.println(decrypt("5LJWpda5OLc."));
+		 System.out.println(encrypt("qky123456"));
+		 System.out.println(decrypt("IWXlvzPyAusSJQZ7Jv4nIg.."));
 	}
 
 }

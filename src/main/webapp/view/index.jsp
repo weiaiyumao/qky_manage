@@ -10,9 +10,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %> 
 <% Long random = new Date().getTime(); %>
 <%@ page import="com.zqfinance.system.util.DictionaryMap"%>
-<% request.setAttribute("OUTMONEY_FLAG", DictionaryMap.OUTMONEY_FLAG); %>
-<% request.setAttribute("OUTMONEY_FEEPROVIDER", DictionaryMap.OUTMONEY_FEEPROVIDER);%>
-<% request.setAttribute("BANK_MAP", DictionaryMap.BANK_MAP);%>
 <head>
 <style type="text/css">
 	#header{height:85px}
@@ -20,7 +17,7 @@
 	.fontClass{ color: green;}
 </style>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>华融道管理后台</title>
+<title>区块云管理后台</title>
 
 
 <script  type="text/javascript">
@@ -102,11 +99,11 @@ function navTabAjaxDonePass(json){
 
 			<div id="navMenu">
 				<ul>
-					<li class="selected"><a href="${pageContext.request.contextPath}/view/tradingmenu.jsp"><span>交易管理</span></a></li>								
+					<li ><a href="${pageContext.request.contextPath}/view/tradingmenu.jsp"><span>交易管理</span></a></li>
 					<li><a href="${pageContext.request.contextPath}/view/financemenu.jsp"><span>财务管理</span></a></li>
 					<li><a href="${pageContext.request.contextPath}/view/rptMenu.jsp"><span>报表管理</span></a></li>
 					<li><a href="${pageContext.request.contextPath}/view/config.jsp"><span>配置管理</span></a></li>
-					<li><a href="${pageContext.request.contextPath}/view/sysmgrmenu.jsp"><span>系统管理</span></a></li>
+					<li class="selected"><a href="${pageContext.request.contextPath}/view/sysmgrmenu.jsp"><span>系统管理</span></a></li>
 				</ul>
 			</div>
 	
@@ -140,75 +137,7 @@ function navTabAjaxDonePass(json){
 				</ul>
 				<div id="innercontainer" class="navTab-panel tabsPageContent layoutBox" style="overflow: visible;">
 					<div class="page unitBox">
-					<c:if test="${todo == 'yes'}">
-						<h3 style="line-height: 30px;padding-left: 30px; margin-top:10px;">待处理事项：</h3>
-					</c:if>
-					<c:if test="${showSymoney == 'yes'}">
-						<p style="line-height: 30px;padding-left: 30px;">当前理财产品《月利宝》剩余可投资金额为：<span <c:if test="${symoney <= 300000}">style='color: red;'</c:if> >${symoney/10000}万</span><c:if test="${symoney <= 300000}">，请添加可投资金额！</c:if></p>
-					</c:if>
-					<c:if test="${showLoanSyMoney == 'yes' }">
-						<p style="line-height: 30px;padding-left: 30px;">当前可供理财产品匹配的贷款标剩余可匹配金额为：<span <c:if test="${loanSyMoney <= 300000}">style='color: red;'</c:if> >${loanSyMoney/10000}万</span><c:if test="${symoney <= 300000}"><span style="margin-left: 20px;"><a href="${ctx}/loan/forwordLoan.htm" target="navTab" title="发标" style="color: blue;">立即处理</a></span></c:if></p>
-					</c:if>
-					<c:if test="${showOutMoney == 'yes' }">
-						<p style="line-height: 30px;padding-left: 30px;">预计今天公司需要充值金额为：<span style="color: red;">${outMoney}</span>元，不包含手续费！（规则：统计昨日和前天客户所有的提现申请金额）</p>
-					</c:if>
-					<c:if test="${showCompanyOutMoney == 'yes' }">
-						<p style="line-height: 30px;padding-left: 30px;">预计今天公司可以提现金额为：<span style="color: red;">${companyOutMoney}</span>元（规则：统计客户昨日成功提现后剩余未取现金额+本月已经取现客户昨日购买订单金额）<span style="color: red;">具体可以提现金额多少，需根据公司账户余额来决定！此数据仅供参考！</span></p>
-					</c:if>
-					<c:if test="${showOutMoneyToAuditListTopfive =='yes'}">
-						<p style="line-height: 30px;padding-left: 30px;color: red;">客户提现待处理，共${outMoneyToAuditListTopfive.page.totalCount}条<span style="margin-left: 20px;"><a href="${pageContext.request.contextPath }/outMoney/getOutMoneyList.htm?flag=0" rel="outmoneymgr" target="navTab" target="navTab" title="提现管理" style="color: blue;">立即处理</a></span></p>
-						<table class="table" width="100%">
-							<thead>
-								<tr>
-								    <th width="10%" style="border-top: 1px #d0d0d0 solid;">订单号</th>
-									<th width="12%" style="border-top: 1px #d0d0d0 solid;">取现金额(RMB)</th>
-									<th width="8%" style="border-top: 1px #d0d0d0 solid;">所属银行</th>
-									<th width="12%" style="border-top: 1px #d0d0d0 solid;">银行卡号</th>
-									<th width="5%" style="border-top: 1px #d0d0d0 solid;">提现状态</th>
-									<th width="10%" style="border-top: 1px #d0d0d0 solid;">订单生成时间</th>
-								</tr>
-							</thead>
-							<tbody>
-								<c:forEach var="vMap" items="${outMoneyToAuditListTopfive.contentList }">
-									<tr target="id_outMoney" rel="${vMap['id']}">
-										<td>${vMap['orderNo']}</td>
-										<td>${vMap['money']}</td>
-										<td>${BANK_MAP[vMap['bank']]}</td>
-										<td>${vMap['cardid']}</td> 
-										<td>${OUTMONEY_FLAG[vMap['status']]}</td>					
-										<td>${vMap['timeCreate'] }</td>
-									</tr>
-								</c:forEach>
-							</tbody>
-						</table>
-					</c:if>
-					<c:if test="${showOutMoneyToMakeLoansListTopfive == 'yes'}">
-						<p style="line-height: 30px;padding-left: 30px;color: red;">客户提现待放款，共${outMoneyToMakeLoansListTopfive.page.totalCount}条<span style="margin-left: 20px;"><a href="${pageContext.request.contextPath }/outMoney/getOutMoneyList.htm?flag=3" rel="outmoneymgr" target="navTab" title="提现管理" style="color: blue;">立即处理</a></span></p>
-						<table class="table" width="100%">
-							<thead>
-								<tr>
-								    <th width="10%" style="border-top: 1px #d0d0d0 solid;">订单号</th>
-									<th width="12%" style="border-top: 1px #d0d0d0 solid;">取现金额(RMB)</th>
-									<th width="8%" style="border-top: 1px #d0d0d0 solid;">所属银行</th>
-									<th width="12%" style="border-top: 1px #d0d0d0 solid;">银行卡号</th>
-									<th width="5%" style="border-top: 1px #d0d0d0 solid;">提现状态</th>
-									<th width="10%" style="border-top: 1px #d0d0d0 solid;">订单生成时间</th>
-								</tr>
-							</thead>
-							<tbody>
-								<c:forEach var="vMap" items="${outMoneyToMakeLoansListTopfive.contentList }">
-									<tr target="id_outMoney" rel="${vMap['id']}">
-										<td>${vMap['orderNo']}</td>
-										<td>${vMap['money']}</td>
-										<td>${BANK_MAP[vMap['bank']]}</td>
-										<td>${vMap['cardid']}</td> 
-										<td>${OUTMONEY_FLAG[vMap['status']]}</td>					
-										<td>${vMap['timeCreate'] }</td>
-									</tr>
-								</c:forEach>
-							</tbody>
-						</table>	
-					</c:if>
+
 					</div>
 				</div>
 			</div>
@@ -216,7 +145,7 @@ function navTabAjaxDonePass(json){
 
 	</div>
 
-	<div id="footer">版权所有 中秋（上海）金融信息服务有限公司 Copyright &copy; 2007-2014 <a href="view/systemResearchPersonnelInfo.html" target="dialog"> 华融道技术团队</a> 沪ICP备13024115号-4</div>
+	<div id="footer">版权所有  区块云（上海）金融信息服务有限公司 Copyright &copy; 2007-2014 <a href="view/systemResearchPersonnelInfo.html" target="dialog"> 区块云技术团队</a> 沪ICP备13024152号-4</div>
 
 </body>
 </html>
