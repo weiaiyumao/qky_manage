@@ -25,7 +25,7 @@ public class LoginfoController extends DwzAjaxController{
 	@Autowired
 	private LoginfoService LoginfoService;
 	/**
-	 * 查询Loginfo列表
+	 * 查询Loginfo列表111
 	 * @author 宋宇
 	 */
 	@RequestMapping("/getLoginfoList")
