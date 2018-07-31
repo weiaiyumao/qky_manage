@@ -44,9 +44,9 @@ public class ConfigManager {
 	}
 
 	
-	public static final String CFG_LCTRADING_PRIKEY = props.getProperty("LCTRADING_PRIKEY");  // 签名私钥
-	public static final String CFG_LCTRADING_SIGNKEY = props.getProperty("LCTRADING_SIGNKEY");  // 签名密码
-	public static final String CFG_LCTRADING_SIGNPARAM = props.getProperty("LCTRADING_SIGNPARAM");    // 验签请求参数名
+	public static final String CFG_LCTRADING_PRIKEY = props.getProperty("trading.pirkey");  // 签名私钥
+	public static final String CFG_LCTRADING_SIGNKEY = props.getProperty("trading.signkey");  // 签名密码
+	public static final String CFG_LCTRADING_SIGNPARAM = props.getProperty("trading.signparam");    // 验签请求参数名
 	
 	
 	public static final String CFG_P2B_PRIKEY = props.getProperty("P2B_PRIKEY");  // 签名私钥

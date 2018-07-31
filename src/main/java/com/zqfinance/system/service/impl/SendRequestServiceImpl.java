@@ -2,10 +2,8 @@
 
 package com.zqfinance.system.service.impl;
 
-import java.io.IOException;
 import java.util.Iterator;
 
-import javax.servlet.http.HttpServletResponse;
 
 import net.sf.json.JSONObject;
 
@@ -21,8 +19,6 @@ public class SendRequestServiceImpl implements SendRequestService {
 
 	@Override
 	public String sendRequest(String url,JSONObject jsonObject) {
-		
-
 		String pageSize = null;
 		
 		@SuppressWarnings("rawtypes")
